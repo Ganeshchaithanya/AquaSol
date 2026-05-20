@@ -155,21 +155,19 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: _videoReady && _controller != null
-          ? Center(
-              child: SizedBox.expand(
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,       // fills full width, height auto from aspect ratio
-                  alignment: Alignment.center, // centers vertically
-                  child: SizedBox(
-                    width: _controller!.value.size.width,
-                    height: _controller!.value.size.height,
-                    child: VideoPlayer(_controller!),
-                  ),
+          ? SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.cover,        // full screen like Zomato/Swiggy
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: _controller!.value.size.width,
+                  height: _controller!.value.size.height,
+                  child: VideoPlayer(_controller!),
                 ),
               ),
             )
           : const SizedBox.expand(
-              child: ColoredBox(color: Colors.black), // pure black while loading
+              child: ColoredBox(color: Colors.black),
             ),
     );
   }
