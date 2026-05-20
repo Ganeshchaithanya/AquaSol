@@ -27,6 +27,14 @@ class GetStartedScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 24),
+                    // Header Logo
+                    Center(
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        width: 180,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                     const SizedBox(height: 48),
                     
                     Text(
