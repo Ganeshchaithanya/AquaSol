@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../core/services/language_provider.dart';
 import '../../shared/widgets/animated_interactive_card.dart';
 import '../../l10n/app_localizations.dart';
+import '../../core/services/update_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,6 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _dashboard = data;
           _hasError = false;
+        });
+
+        // Trigger the automatic update check silently in the background
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) {
+            UpdateService.checkForUpdates(context);
+          }
         });
       }
     } catch (e) {
