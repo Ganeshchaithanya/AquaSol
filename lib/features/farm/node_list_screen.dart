@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -24,14 +25,27 @@ class _NodeListScreenState extends State<NodeListScreen> {
   bool _isLoading = true;
   List<dynamic> _nodes = [];
 
+  Timer? _refreshTimer;
+
   @override
   void initState() {
     super.initState();
     _load();
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _load(silent: true);
+    });
   }
 
-  Future<void> _load() async {
-    setState(() => _isLoading = true);
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _load({bool silent = false}) async {
+    if (!silent) {
+      setState(() => _isLoading = true);
+    }
     final apiService = Provider.of<ApiService>(context, listen: false);
     try {
       final zoneData = await apiService.getZone(widget.zoneId);
@@ -43,7 +57,9 @@ class _NodeListScreenState extends State<NodeListScreen> {
     } catch (e) {
       debugPrint('Load nodes error: $e');
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted && !silent) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -137,8 +153,14 @@ class _NodeListScreenState extends State<NodeListScreen> {
           ],
         ),
         onTap: () {
-          // Navigate to Node Detail
-          context.push('/farm/node/${node['mac_address']}', extra: node);
+          // Navigate to Node Detail with node details and zoneId
+          context.push(
+            '/farm/node/${node['mac_address']}',
+            extra: {
+              'node': node,
+              'zoneId': widget.zoneId,
+            },
+          );
         },
       ),
     );

@@ -6,9 +6,11 @@ import 'app/router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/services/language_provider.dart';
 import 'core/services/api_service.dart';
+import 'core/services/notification_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initialize();
   runApp(
     MultiProvider(
       providers: [

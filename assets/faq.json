@@ -1,0 +1,62 @@
+[
+  {
+    "category": "Farm Setup & Configuration",
+    "items": [
+      {
+        "question": "How do I set up a new farm on AquaSol?",
+        "answer": "To set up your farm, go to the 'Setup My Farm' screen. Enter your farm name, select your farm's physical location on the map (used for precision weather forecasting), and specify the total acres. Once created, you can divide your farm into physical Zones (e.g., Tomato Patch, Maize Field) to enable zone-specific AI irrigation."
+      },
+      {
+        "question": "How do I pair and connect master gateways and node sensors?",
+        "answer": "1. Power on your Master Gateway and make sure it is connected to your local farm network.\n2. In the app, navigate to the QR Scanner screen and scan the QR code printed on your gateway or node.\n3. The system will automatically register and authorize the MAC address on the backend server. \n4. Assign nodes to their respective logical slots inside your physical Zones."
+      },
+      {
+        "question": "What soil types and crop configurations are supported?",
+        "answer": "AquaSol supports clay, loam, sandy loam, and sandy soils. Crop choices include Tomato, Peanut, Pepper, Lettuce, Maize, and Rice. These options configure the biophysical models (e.g., Root Depth, Crop Coefficient Kc, and soil moisture holding capacities) to tune the AI recommendation engine."
+      }
+    ]
+  },
+  {
+    "category": "Connectivity & Local Server",
+    "items": [
+      {
+        "question": "Why do the gateway and mobile device need to be on the same Wi-Fi?",
+        "answer": "While we have successfully hosted the main backend on the cloud server, real-time telemetry ingestion and peer-to-peer control commands between the Master Gateway and local sensors operate over high-frequency local Wi-Fi. This ensures that even if external internet connectivity is lost or unstable, your smart valves will continue to irrigate and function reliably based on local sensor feedback."
+      },
+      {
+        "question": "How do I update the API endpoint address?",
+        "answer": "You can change the API server address inside the App Settings or Profile page. Ensure that you enter the correct server IP/Port or domain where the AquaSol backend server is running."
+      }
+    ]
+  },
+  {
+    "category": "AI Decisions & Sensors",
+    "items": [
+      {
+        "question": "How does the AI decide when to irrigate?",
+        "answer": "AquaSol aggregates real-time soil moisture, air temperature, and relative humidity from physical sensor nodes, and combines them with a 6-hour and 24-hour weather forecast. An advanced XGBoost Decision Engine models the crop's biophysical water demand (Kc) and soil depletion rate to predict if irrigation is necessary, avoiding water wastage before scheduled rainfall."
+      },
+      {
+        "question": "What is Virtual Sensing and when does it activate?",
+        "answer": "If a physical sensor node goes offline or is damaged, the AI system activates 'Virtual Sensing'. It uses spatial interpolation and biophysical models of neighboring peer zones to estimate the soil moisture of the offline zone, maintaining uninterrupted automated control until you replace or reboot the physical node."
+      },
+      {
+        "question": "How does the anomaly detection system work?",
+        "answer": "Every telemetry packet is fed into a hydraulic continuity guard. It checks for sudden non-physical spikes or slow sensor drift (where readings don't respond normally after an irrigation cycle). If an anomaly is detected, the trust score is lowered, and an alert is generated to prevent over-irrigation."
+      }
+    ]
+  },
+  {
+    "category": "Support & Troubleshooting",
+    "items": [
+      {
+        "question": "How do I check my system alerts?",
+        "answer": "Tapping the Bell icon in the upper-right corner of the Home screen opens the System Alerts page. Here, you'll see real-time updates regarding node failures, sensor drift warnings, rain events, and automatic valve actions."
+      },
+      {
+        "question": "Who can I contact for support?",
+        "answer": "If you experience hardware faults or require support setting up your farm, reach out to our engineering team at support@aquasol.io, call our 24/7 agricultural helpline at +1 (800) 555-SOLU, or ask our intelligent AI assistant 'Solu' in the Chatbot section."
+      }
+    ]
+  }
+]

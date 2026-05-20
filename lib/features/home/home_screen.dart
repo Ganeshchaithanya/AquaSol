@@ -1,14 +1,18 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/services/api_service.dart';
-import 'package:provider/provider.dart';
 import '../../core/services/language_provider.dart';
+import '../../core/services/notification_service.dart';
 import '../../shared/widgets/animated_interactive_card.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/services/update_service.dart';
+import '../../shared/widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,11 +26,133 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   bool _hasError = false;
   Map<String, dynamic>? _dashboard;
+  Timer? _pollingTimer;
 
   @override
   void initState() {
     super.initState();
     _load();
+    _startPolling();
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (mounted) {
+        _silentPoll();
+      }
+    });
+  }
+
+  Future<void> _silentPoll() async {
+    try {
+      final data = await _apiService.getDashboard();
+      if (mounted && data != null) {
+        setState(() {
+          _dashboard = data;
+        });
+        _checkThresholdsAndAlerts();
+      }
+    } catch (e) {
+      debugPrint('Silent poll error: $e');
+    }
+  }
+
+  Future<void> _checkThresholdsAndAlerts() async {
+    if (_dashboard == null) return;
+
+    // 1. Soil moisture threshold checks
+    final zones = _dashboard?['zones'] as List?;
+    if (zones != null) {
+      final prefs = await SharedPreferences.getInstance();
+      final now = DateTime.now();
+
+      for (final zone in zones) {
+        final zoneId = zone['zone_id']?.toString() ?? '';
+        final zoneName = zone['name']?.toString() ?? 'Zone';
+        final currentMoisture = zone['current_moisture'] != null 
+            ? (zone['current_moisture'] as num).toDouble() 
+            : null;
+        final minMoisture = zone['target_moisture_min'] != null
+            ? (zone['target_moisture_min'] as num).toDouble()
+            : 40.0;
+
+        if (currentMoisture != null) {
+          // Low Moisture Warning
+          if (currentMoisture < minMoisture) {
+            final lastNotifiedStr = prefs.getString('last_moisture_alert_$zoneId');
+            bool shouldNotify = true;
+            if (lastNotifiedStr != null) {
+              final lastNotified = DateTime.parse(lastNotifiedStr);
+              // Cooldown: 60 minutes between moisture alerts per zone to prevent spamming
+              if (now.difference(lastNotified).inMinutes < 60) {
+                shouldNotify = false;
+              }
+            }
+
+            if (shouldNotify) {
+              await NotificationService.showNotification(
+                id: zoneId.hashCode ^ 999,
+                title: '💧 Low Soil Moisture: $zoneName',
+                body: 'Soil moisture in $zoneName is at ${currentMoisture.toStringAsFixed(1)}%, which is below your minimum threshold of ${minMoisture.toStringAsFixed(1)}%. Irrigation recommended!',
+                channelId: 'sensor_alerts',
+                channelName: 'Sensor Alerts',
+              );
+              await prefs.setString('last_moisture_alert_$zoneId', now.toIso8601String());
+            }
+          }
+        }
+      }
+    }
+
+    // 2. Fetch and notify about new backend alerts
+    try {
+      final recentAlerts = await _apiService.getAlerts();
+      if (recentAlerts.isNotEmpty) {
+        final prefs = await SharedPreferences.getInstance();
+        final notifiedAlerts = prefs.getStringList('notified_backend_alerts') ?? [];
+        final List<String> newNotifiedAlerts = List.from(notifiedAlerts);
+
+        int notificationCount = 0;
+        for (final alert in recentAlerts) {
+          final alertId = alert['id']?.toString() ?? '';
+          if (alertId.isNotEmpty && !notifiedAlerts.contains(alertId)) {
+            final title = alert['title'] ?? 'System Update';
+            final desc = alert['description'] ?? 'An event occurred in the irrigation system.';
+            
+            await NotificationService.showNotification(
+              id: alertId.hashCode,
+              title: title,
+              body: desc,
+              channelId: 'system_alerts',
+              channelName: 'System Alerts',
+              channelDescription: 'Alerts triggered by backend system events',
+            );
+
+            newNotifiedAlerts.add(alertId);
+            notificationCount++;
+            
+            // Limit to max 3 concurrent alerts on initial poll to avoid overwhelming the notification tray
+            if (notificationCount >= 3) break;
+          }
+        }
+
+        if (notificationCount > 0) {
+          if (newNotifiedAlerts.length > 100) {
+            newNotifiedAlerts.removeRange(0, newNotifiedAlerts.length - 100);
+          }
+          await prefs.setStringList('notified_backend_alerts', newNotifiedAlerts);
+        }
+      }
+    } catch (e) {
+      debugPrint('Error checking backend alerts: $e');
+    }
   }
 
   Future<void> _load() async {
@@ -41,6 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
           _dashboard = data;
           _hasError = false;
         });
+
+        // Check thresholds on initial load
+        _checkThresholdsAndAlerts();
 
         // Trigger the automatic update check silently in the background
         Future.delayed(const Duration(milliseconds: 500), () {
@@ -136,6 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: _buildAppBar(l10n),
+      drawer: const AppDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -278,6 +408,14 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.background,
       elevation: 0,
       centerTitle: false,
+      leading: Builder(
+        builder: (context) {
+          return IconButton(
+            icon: const Icon(LucideIcons.menu, color: AppColors.primary, size: 24),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          );
+        },
+      ),
       title: Row(
         children: [
           Container(

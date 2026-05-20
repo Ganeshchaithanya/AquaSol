@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -18,11 +19,21 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
   bool _isLoading = true;
   Map<String, dynamic>? _zone;
   final Map<String, bool> _irrigationLoading = {};
+  Timer? _refreshTimer;
 
   @override
   void initState() {
     super.initState();
     _load();
+    _refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _load();
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _handleManualIrrigate(String action, {dynamic nodeSlotId}) async {

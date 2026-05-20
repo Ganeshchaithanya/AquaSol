@@ -26,11 +26,13 @@ import '../features/health/system_health_screen.dart';
 import '../features/settings/profile_screen.dart';
 import '../features/planner/crop_planner_screen.dart';
 import '../shared/widgets/main_shell.dart';
+import '../features/faq/faq_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
+
     GoRoute(path: '/get-started', builder: (context, state) => const GetStartedScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
     GoRoute(path: '/register', builder: (context, state) => const SignupScreen()),
@@ -68,7 +70,18 @@ final GoRouter appRouter = GoRouter(
                 ),
                 GoRoute(
                   path: 'node/:mac',
-                  builder: (context, state) => NodeDetailScreen(node: state.extra as Map<String, dynamic>),
+                  builder: (context, state) {
+                    final extra = state.extra;
+                    if (extra is Map<String, dynamic> && extra.containsKey('node')) {
+                      return NodeDetailScreen(
+                        initialNode: extra['node'] as Map<String, dynamic>,
+                        zoneId: extra['zoneId'] as String?,
+                      );
+                    }
+                    return NodeDetailScreen(
+                      initialNode: extra as Map<String, dynamic>,
+                    );
+                  },
                 ),
                 GoRoute(path: 'diary', builder: (context, state) => const DiaryScreen()),
                 GoRoute(path: 'diary/add', builder: (context, state) => const AddDiaryScreen()),
@@ -128,5 +141,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/alerts', builder: (context, state) => const AlertsScreen()),
     GoRoute(path: '/system-health', builder: (context, state) => const SystemHealthScreen()),
     GoRoute(path: '/profile', builder: (context, state) => const ProfileScreen()),
+    GoRoute(path: '/faq', builder: (context, state) => const FaqScreen()),
   ],
 );
