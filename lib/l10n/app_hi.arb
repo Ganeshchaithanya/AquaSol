@@ -1,0 +1,123 @@
+{
+  "@@locale": "hi",
+  "appTitle": "एक्वासोल",
+  "welcomeBack": "वापसी पर स्वागत है",
+  "signInToManage": "अपने स्मार्ट फार्म को प्रबंधित करने के लिए साइन इन करें",
+  "phoneNumber": "फ़ोन नंबर",
+  "password": "पासवर्ड",
+  "signIn": "साइन इन करें",
+  "createAccount": "खाता बनाएं",
+  "home": "होम",
+  "farm": "फार्म",
+  "control": "नियंत्रण",
+  "data": "डेटा",
+  "solu": "सोलु",
+  "farmHealthScore": "फार्म स्वास्थ्य स्कोर",
+  "allSystemsOperational": "सभी प्रणालियाँ चालू हैं",
+  "aiAdvisory": "एआई सलाह",
+  "quickOperations": "त्वरित संचालन",
+  "farmDiary": "फार्म डायरी",
+  "cropPlanner": "फसल योजनाकार",
+  "systemHealth": "सिस्टम स्वास्थ्य",
+  "pnlAnalytics": "पी एंड एल विश्लेषण",
+  "settings": "सेटिंग्स",
+  "language": "भाषा",
+  "signOut": "साइन आउट",
+  "irrigationSchedule": "सिंचाई अनुसूची",
+  "selectTarget": "लक्ष्य चुनें",
+  "individualZone": "व्यक्तिगत ज़ोन",
+  "completeAcre": "पूरा एकड़",
+  "dateTime": "दिनांक और समय",
+  "date": "दिनांक",
+  "time": "समय",
+  "repeatOn": "दोहराएँ",
+  "mode": "मोड",
+  "manualTimer": "मैनुअल टाइमर",
+  "aiWindow": "एआई विंडो",
+  "durationIntensity": "अवधि और तीव्रता",
+  "duration": "अवधि",
+  "intensity": "तीव्रता",
+  "confirmSchedule": "अनुसूची की पुष्टि करें",
+  "scheduleSuccess": "अनुसूची सफलतापूर्वक पुष्ट की गई!",
+  "scheduleError": "अनुसूची सहेजने में विफल।",
+  "acreWideIrrigation": "एकड़-व्यापी सिंचाई",
+  "zoneSchedule": "{name} अनुसूची",
+  "@zoneSchedule": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "acreAllZones": "एकड़ 1 (सभी ज़ोन)",
+  "dashboard": "डैशबोर्ड",
+  "greeting": "नमस्कार",
+  "profile": "प्रोफ़ाइल",
+  "fullName": "पूरा नाम",
+  "emailAddress": "ईमेल पता",
+  "phoneOptional": "फ़ोन नंबर (वैकल्पिक)",
+  "confirmPassword": "पासवर्ड की पुष्टि करें",
+  "agreeToTerms": "मैं सहमत हूँ ",
+  "termsOfService": "सेवा की शर्तों",
+  "privacyPolicy": "गोपनीयता नीति",
+  "alreadyHaveAccount": "पहले से ही एक खाता है?",
+  "dontHaveAccount": "खाता नहीं है?",
+  "joinFarmers": "अपना खाता बनाएं",
+  "joinFarmersSub": "भारत भर के हजारों स्मार्ट किसानों से जुड़ें",
+  "signInFree": "साइन इन करें",
+  "signUpFree": "निःशुल्क साइन अप करें",
+  "forgotPassword": "पासवर्ड भूल गए?",
+  "orContinueWith": "या इसके साथ जारी रखें",
+  "selectLanguage": "भाषा चुनें",
+  "whatGrowing": "आप क्या उगा रहे हैं?",
+  "pickCropSoil": "अपनी प्राथमिक फसल और मिट्टी के प्रकार चुनें",
+  "primaryCropLabel": "प्राथमिक फसल",
+  "soilTypeLabel": "मिट्टी का प्रकार",
+  "continues": "जारी रखें",
+  "back": "पीछे",
+  "zonesCreatedSuccess": "जोन सफलतापूर्वक बनाए गए!",
+  "tellUsAboutFarm": "हमें अपने फार्म के बारे में बताएं",
+  "quickDetailsSub": "चीजों को सेट करने के लिए कुछ त्वरित विवरण",
+  "farmNameLabel": "फार्म का नाम",
+  "ownerNameLabel": "मालिक का नाम",
+  "stateLabel": "राज्य",
+  "villageTownLabel": "गांव / शहर",
+  "infrastructureConfig": "इन्फ्रास्ट्रक्चर कॉन्फ़िगरेशन",
+  "defineHierarchy": "अपने फार्म की सिंचाई पदानुक्रम को परिभाषित करें",
+  "totalAcresLabel": "कुल एकड़",
+  "zonesPerAcreLabel": "प्रति एकड़ जोन",
+  "totalZonesGenerated": "कुल उत्पन्न जोन",
+  "nodesPerZoneLabel": "प्रति जोन नोड्स",
+  "waterSourceLabel": "जल स्रोत",
+  "personalizeNaming": "नामकरण को व्यक्तिगत बनाएं",
+  "giveUniqueNames": "अपने जोन और नोड्स को अद्वितीय नाम दें",
+  "hardwarePairing": "हार्डवेयर पेयरिंग",
+  "useCodesToPair": "अपने भौतिक नोड्स को पेयर करने के लिए इन कोड का उपयोग करें",
+  "masterGateway": "मास्टर गेटवे",
+  "pairThisFirst": "इसे पहले पेयर करें — यह सभी नोड्स को रूट करता है",
+  "stepX": "चरण {index}",
+  "@stepX": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "pairingCodeLabel": "पेयरिंग कोड",
+  "fieldNodesLabel": "फील्ड नोड्स",
+  "pairAfterMasterOnline": "मास्टर गेटवे ऑनलाइन होने के बाद पेयर करें",
+  "finalizeSetup": "सेटअप को अंतिम रूप दें",
+  "goToDashboard": "डैशबोर्ड पर जाएं",
+  "skip": "छोड़ें",
+  "stepProgress": "चरण {current} / {total}",
+  "@stepProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
+}

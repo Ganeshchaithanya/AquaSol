@@ -1,0 +1,123 @@
+{
+  "@@locale": "kn",
+  "appTitle": "ಆಕ್ವಾಸೋಲ್",
+  "welcomeBack": "ಮರಳಿ ಸ್ವಾಗತ",
+  "signInToManage": "ನಿಮ್ಮ ಸ್ಮಾರ್ಟ್ ಫಾರ್ಮ್ ನಿರ್ವಹಿಸಲು ಸೈನ್ ಇನ್ ಮಾಡಿ",
+  "phoneNumber": "ಫೋನ್ ಸಂಖ್ಯೆ",
+  "password": "ಪಾಸ್ವರ್ಡ್",
+  "signIn": "ಸೈನ್ ಇನ್",
+  "createAccount": "ಖಾತೆ ರಚಿಸಿ",
+  "home": "ಮನೆ",
+  "farm": "ಹೊಲ",
+  "control": "ನಿಯಂತ್ರಣ",
+  "data": "ಮಾಹಿತಿ",
+  "solu": "ಸೋಲು",
+  "farmHealthScore": "ಫಾರ್ಮ್ ಆರೋಗ್ಯ ಸ್ಕೋರ್",
+  "allSystemsOperational": "ಎಲ್ಲಾ ವ್ಯವಸ್ಥೆಗಳು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿವೆ",
+  "aiAdvisory": "AI ಸಲಹೆ",
+  "quickOperations": "ತ್ವರಿತ ಕಾರ್ಯಾಚರಣೆಗಳು",
+  "farmDiary": "ಫಾರ್ಮ್ ಡೈರಿ",
+  "cropPlanner": "ಬೆಳೆ ಯೋಜಕ",
+  "systemHealth": "ಸಿಸ್ಟಮ್ ಆರೋಗ್ಯ",
+  "pnlAnalytics": "ಲಾಭ ಮತ್ತು ನಷ್ಟ",
+  "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+  "language": "ಭಾಷೆ",
+  "signOut": "ಸೈನ್ ಔಟ್",
+  "irrigationSchedule": "ನೀರಾವರಿ ವೇಳಾಪಟ್ಟಿ",
+  "selectTarget": "ಗುರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+  "individualZone": "ವೈಯಕ್ತಿಕ ವಲಯ",
+  "completeAcre": "ಸಂಪೂರ್ಣ ಎಕರೆ",
+  "dateTime": "ದಿನಾಂಕ ಮತ್ತು ಸಮಯ",
+  "date": "ದಿನಾಂಕ",
+  "time": "ಸಮಯ",
+  "repeatOn": "ಪುನರಾವರ್ತಿಸಿ",
+  "mode": "ಮೋಡ್",
+  "manualTimer": "ಮ್ಯಾನುಯಲ್ ಟೈಮರ್",
+  "aiWindow": "AI ವಿಂಡೋ",
+  "durationIntensity": "ಅವಧಿ ಮತ್ತು ತೀವ್ರತೆ",
+  "duration": "ಅವಧಿ",
+  "intensity": "ತೀವ್ರತೆ",
+  "confirmSchedule": "ವೇಳಾಪಟ್ಟಿಯನ್ನು ಖಚಿತಪಡಿಸಿ",
+  "scheduleSuccess": "ವೇಳಾಪಟ್ಟಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಖಚಿತಪಡಿಸಲಾಗಿದೆ!",
+  "scheduleError": "ವೇಳಾಪಟ್ಟಿಯನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "acreWideIrrigation": "ಎಕರೆ ಮಟ್ಟದ ನೀರಾವರಿ",
+  "zoneSchedule": "{name} ವೇಳಾಪಟ್ಟಿ",
+  "@zoneSchedule": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "acreAllZones": "ಎಕರೆ 1 (ಎಲ್ಲಾ ವಲಯಗಳು)",
+  "dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+  "greeting": "ಶುಭಾಶಯ",
+  "profile": "ಪ್ರೊಫೈಲ್",
+  "selectLanguage": "ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",
+  "fullName": "ಪೂರ್ಣ ಹೆಸರು",
+  "emailAddress": "ಇಮೇಲ್ ವಿಳಾಸ",
+  "phoneOptional": "ಫೋನ್ ಸಂಖ್ಯೆ (ಐಚ್ಛಿಕ)",
+  "confirmPassword": "ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಿಸಿ",
+  "agreeToTerms": "ನಾನು ಒಪ್ಪುತ್ತೇನೆ ",
+  "termsOfService": "ಸೇವಾ ನಿಯಮಗಳು",
+  "privacyPolicy": "ಗೌಪ್ಯತಾ ನೀತಿ",
+  "alreadyHaveAccount": "ಈಗಾಗಲೇ ಖಾತೆ ಇದೆಯೇ?",
+  "dontHaveAccount": "ಖಾತೆ ಇಲ್ಲವೇ?",
+  "joinFarmers": "ನಿಮ್ಮ ಖಾತೆ ರಚಿಸಿ",
+  "joinFarmersSub": "ಭಾರತದಾದ್ಯಂತ ಸಾವಿರಾರು ಸ್ಮಾರ್ಟ್ ರೈತರೊಂದಿಗೆ ಸೇರಿ",
+  "signInFree": "ಸೈನ್ ಇನ್",
+  "signUpFree": "ಉಚಿತವಾಗಿ ನೋಂದಾಯಿಸಿ",
+  "forgotPassword": "ಪಾಸ್ವರ್ಡ್ ಮರೆತಿದ್ದೀರಾ?",
+  "orContinueWith": "ಅಥವಾ ಮುಂದುವರಿಯಿರಿ",
+  "whatGrowing": "ನೀವು ಏನು ಬೆಳೆಯುತ್ತಿದ್ದೀರಿ?",
+  "pickCropSoil": "ನಿಮ್ಮ ಪ್ರಾಥಮಿಕ ಬೆಳೆ ಮತ್ತು ಮಣ್ಣಿನ ವಿಧವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+  "primaryCropLabel": "ಪ್ರಾಥಮಿಕ ಬೆಳೆ",
+  "soilTypeLabel": "ಮಣ್ಣಿನ ವಿಧ",
+  "continues": "ಮುಂದುವರಿಸಿ",
+  "back": "ಹಿಂದೆ",
+  "zonesCreatedSuccess": "ವಲಯಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!",
+  "tellUsAboutFarm": "ನಿಮ್ಮ ಫಾರ್ಮ್ ಬಗ್ಗೆ ಹೇಳಿ",
+  "quickDetailsSub": "ಸೆಟಪ್ ಮಾಡಲು ಕೆಲವು ವಿವರಗಳು",
+  "farmNameLabel": "ಫಾರ್ಮ್ ಹೆಸರು",
+  "ownerNameLabel": "ಮಾಲೀಕರ ಹೆಸರು",
+  "stateLabel": "ರಾಜ್ಯ",
+  "villageTownLabel": "ಗ್ರಾಮ / ಪಟ್ಟಣ",
+  "infrastructureConfig": "ಮೂಲಸೌಕರ್ಯ ಕಾನ್ಫಿಗ್",
+  "defineHierarchy": "ನಿಮ್ಮ ಫಾರ್ಮ್‌ನ ನೀರಾವರಿ ಶ್ರೇಣಿಯನ್ನು ನಿರ್ವಚಿಸಿ",
+  "totalAcresLabel": "ಒಟ್ಟು ಎಕರೆಗಳು",
+  "zonesPerAcreLabel": "ಎಕರೆಗೆ ವಲಯಗಳು",
+  "totalZonesGenerated": "ಒಟ್ಟು ವಲಯಗಳು",
+  "nodesPerZoneLabel": "ವಲಯಕ್ಕೆ ನೋಡ್‌ಗಳು",
+  "waterSourceLabel": "ನೀರಿನ ಮೂಲ",
+  "personalizeNaming": "ಹೆಸರಿಡುವಿಕೆ ವ್ಯಕ್ತಿಗತಗೊಳಿಸಿ",
+  "giveUniqueNames": "ನಿಮ್ಮ ವಲಯಗಳು ಮತ್ತು ನೋಡ್‌ಗಳಿಗೆ ಅನನ್ಯ ಹೆಸರುಗಳನ್ನು ನೀಡಿ",
+  "hardwarePairing": "ಹಾರ್ಡ್‌ವೇರ್ ಜೋಡಣೆ",
+  "useCodesToPair": "ನಿಮ್ಮ ಭೌತಿಕ ನೋಡ್‌ಗಳನ್ನು ಜೋಡಿಸಲು ಈ ಕೋಡ್‌ಗಳನ್ನು ಬಳಸಿ",
+  "masterGateway": "ಮಾಸ್ಟರ್ ಗೇಟ್‌ವೇ",
+  "pairThisFirst": "ಇದನ್ನು ಮೊದಲು ಜೋಡಿಸಿ — ಇದು ಎಲ್ಲಾ ನೋಡ್‌ಗಳನ್ನು ರೂಟ್ ಮಾಡುತ್ತದೆ",
+  "stepX": "ಹಂತ {index}",
+  "@stepX": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "pairingCodeLabel": "ಜೋಡಣೆ ಕೋಡ್",
+  "fieldNodesLabel": "ಕ್ಷೇತ್ರ ನೋಡ್‌ಗಳು",
+  "pairAfterMasterOnline": "ಮಾಸ್ಟರ್ ಗೇಟ್‌ವೇ ಆನ್‌ಲೈನ್ ಆದ ನಂತರ ಜೋಡಿಸಿ",
+  "finalizeSetup": "ಸೆಟಪ್ ಅಂತಿಮಗೊಳಿಸಿ",
+  "goToDashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಹೋಗಿ",
+  "skip": "ಬಿಟ್ಟುಬಿಡಿ",
+  "stepProgress": "ಹಂತ {current} / {total}",
+  "@stepProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "@@locale": "en",
+  "appTitle": "AquaSol",
+  "welcomeBack": "Welcome Back",
+  "signInToManage": "Sign in to manage your smart farm",
+  "phoneNumber": "Phone Number",
+  "password": "Password",
+  "signIn": "Sign In",
+  "createAccount": "Create Account",
+  "home": "Home",
+  "farm": "Farm",
+  "control": "Control",
+  "data": "Data",
+  "solu": "Solu",
+  "farmHealthScore": "FARM HEALTH SCORE",
+  "allSystemsOperational": "All systems operational",
+  "aiAdvisory": "AI ADVISORY",
+  "quickOperations": "Quick Operations",
+  "farmDiary": "Farm Diary",
+  "cropPlanner": "Crop Planner",
+  "systemHealth": "System Health",
+  "pnlAnalytics": "P&L Analytics",
+  "settings": "Settings",
+  "language": "Language",
+  "signOut": "Sign Out",
+  "irrigationSchedule": "Irrigation Schedule",
+  "selectTarget": "SELECT TARGET",
+  "individualZone": "Individual Zone",
+  "completeAcre": "Complete Acre",
+  "dateTime": "DATE & TIME",
+  "date": "Date",
+  "time": "Time",
+  "repeatOn": "REPEAT ON",
+  "mode": "MODE",
+  "manualTimer": "Manual Timer",
+  "aiWindow": "AI Window",
+  "durationIntensity": "DURATION & INTENSITY",
+  "duration": "Duration",
+  "intensity": "Intensity",
+  "confirmSchedule": "Confirm Schedule",
+  "scheduleSuccess": "Schedule confirmed successfully!",
+  "scheduleError": "Failed to save schedule.",
+  "acreWideIrrigation": "Acre-wide Irrigation",
+  "zoneSchedule": "{name} Schedule",
+  "@zoneSchedule": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "acreAllZones": "Acre 1 (All Zones)",
+  "dashboard": "Dashboard",
+  "greeting": "Greeting",
+  "profile": "Profile",
+  "selectLanguage": "Select Language",
+  "fullName": "Full Name",
+  "emailAddress": "Email Address",
+  "phoneOptional": "Phone Number (Optional)",
+  "confirmPassword": "Confirm Password",
+  "agreeToTerms": "I agree to the ",
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy Policy",
+  "alreadyHaveAccount": "Already have an account?",
+  "dontHaveAccount": "Don't have an account?",
+  "joinFarmers": "Create your account",
+  "joinFarmersSub": "Join thousands of smart farmers across India",
+  "signInFree": "Sign in",
+  "signUpFree": "Sign up free",
+  "forgotPassword": "Forgot password?",
+  "orContinueWith": "or continue with",
+  "whatGrowing": "What are you growing?",
+  "pickCropSoil": "Pick your primary crop and soil type",
+  "primaryCropLabel": "PRIMARY CROP",
+  "soilTypeLabel": "SOIL TYPE",
+  "continues": "Continue",
+  "back": "Back",
+  "zonesCreatedSuccess": "Zones Created Successfully!",
+  "tellUsAboutFarm": "Tell us about your farm",
+  "quickDetailsSub": "A few quick details to set things up",
+  "farmNameLabel": "FARM NAME",
+  "ownerNameLabel": "OWNER NAME",
+  "stateLabel": "STATE",
+  "villageTownLabel": "VILLAGE / TOWN",
+  "infrastructureConfig": "Infrastructure Config",
+  "defineHierarchy": "Define your farm's irrigation hierarchy",
+  "totalAcresLabel": "TOTAL ACRES",
+  "zonesPerAcreLabel": "ZONES PER ACRE",
+  "totalZonesGenerated": "TOTAL ZONES GENERATED",
+  "nodesPerZoneLabel": "NODES PER ZONE",
+  "waterSourceLabel": "WATER SOURCE",
+  "personalizeNaming": "Personalize Naming",
+  "giveUniqueNames": "Give unique names to your zones and nodes",
+  "hardwarePairing": "Hardware Pairing",
+  "useCodesToPair": "Use these codes to pair your physical nodes",
+  "masterGateway": "Master Gateway",
+  "pairThisFirst": "Pair this first — it routes all nodes",
+  "stepX": "STEP {index}",
+  "@stepX": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "pairingCodeLabel": "Pairing Code",
+  "fieldNodesLabel": "Field Nodes",
+  "pairAfterMasterOnline": "Pair after Master Gateway is online",
+  "finalizeSetup": "Finalize Setup",
+  "goToDashboard": "Go to Dashboard",
+  "skip": "Skip",
+  "stepProgress": "Step {current} of {total}",
+  "@stepProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
+}
