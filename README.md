@@ -4,7 +4,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)](https://android.com)
 [![Release](https://img.shields.io/badge/Download-Latest%20APK-FF5722?logo=github&logoColor=white)](https://github.com/Ganeshchaithanya/AquaSol/releases/latest/download/app-release.apk)
 
-AquaSol is the ultimate native mobile interface for the AquaSol smart cyber-physical irrigation platform. It connects seamlessly with the FastAPI intelligence engine and Neon Serverless Database to deliver real-time telemetry, automated ML-driven water scheduling, micro-weather insights, and robust manual solenoid valve controls.
+**AquaSol** is a smart irrigation management app powered by AI and real-time sensor data. Designed for modern farmers, it connects to a network of ESP32 field nodes monitoring soil humidity, temperature, rainfall, and water flow — delivering live telemetry straight to your phone. The built-in ML engine automatically predicts optimal irrigation schedules using LSTM forecasting and XGBoost models trained on your farm's own history. Control solenoid valves manually or let the system decide, with built-in safety overrides for dry-run protection and automatic rain vetoes. AquaSol keeps your crops healthy, your water usage efficient, and your farm running smart — from anywhere.
 
 ---
 
