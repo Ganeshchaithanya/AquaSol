@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _initVideo() async {
     try {
       final ctrl = VideoPlayerController.asset(
-        'assets/images/aquasol_splash.mp4',
+        'assets/videos/aquasol_splash.mp4',
       );
 
       await ctrl.initialize();
