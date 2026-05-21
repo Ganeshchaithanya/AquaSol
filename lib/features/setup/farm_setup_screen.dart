@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aquasol_app/core/theme/app_colors.dart';
 import 'package:aquasol_app/core/theme/app_text_styles.dart';
 import 'package:aquasol_app/core/services/api_service.dart';
@@ -266,7 +267,9 @@ class _FarmSetupScreenState extends State<FarmSetupScreen> {
       _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
       setState(() => _currentStep++);
     } else if (_currentStep == 4) {
-      context.go('/home');
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_new_registration', false);
+      if (mounted) context.go('/home');
     }
   }
 
@@ -432,7 +435,14 @@ class _FarmSetupScreenState extends State<FarmSetupScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(onPressed: _prevPage, icon: Icon(_currentStep > 0 ? LucideIcons.arrowLeft : LucideIcons.chevronLeft, color: AppColors.textPrimary)),
-          TextButton(onPressed: () => context.go('/home'), child: Text(l10n.skip, style: AppTextStyles.label.copyWith(color: AppColors.textSecondary))),
+          TextButton(
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('is_new_registration', false);
+              if (mounted) context.go('/home');
+            },
+            child: Text(l10n.skip, style: AppTextStyles.label.copyWith(color: AppColors.textSecondary)),
+          ),
         ],
       ),
     );

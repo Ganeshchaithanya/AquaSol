@@ -110,8 +110,13 @@ class _SplashScreenState extends State<SplashScreen> {
         return;
       }
 
-      // Token valid → straight to dashboard, no further checks
-      _authRoute = '/home';
+      // Token valid → check if it is a first-time registration setup
+      final isNewReg = prefs.getBool('is_new_registration') ?? false;
+      if (isNewReg) {
+        _authRoute = '/farm-setup';
+      } else {
+        _authRoute = '/home';
+      }
     } catch (e) {
       final isAuthErr = e.toString().contains('401') ||
           e.toString().contains('403') ||
@@ -124,7 +129,12 @@ class _SplashScreenState extends State<SplashScreen> {
         // Network error — still go home if token exists, else get-started
         final prefs = await SharedPreferences.getInstance();
         final token = prefs.getString('access_token');
-        _authRoute = token != null ? '/home' : '/get-started';
+        final isNewReg = prefs.getBool('is_new_registration') ?? false;
+        if (token != null) {
+          _authRoute = isNewReg ? '/farm-setup' : '/home';
+        } else {
+          _authRoute = '/get-started';
+        }
       }
     }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aquasol_app/core/services/api_service.dart';
 import 'package:aquasol_app/core/theme/app_colors.dart';
 import 'package:aquasol_app/core/theme/app_text_styles.dart';
@@ -79,6 +80,8 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       if (result != null) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('is_new_registration', true);
         if (mounted) context.go('/splash');
       } else {
         if (mounted) {
