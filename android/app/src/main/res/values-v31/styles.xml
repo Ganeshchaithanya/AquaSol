@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme applied to the Android Window while the process is starting on Android 12+ (API 31+) -->
+    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <!-- Remove the system-generated launcher icon on Android 12+ by using a transparent color drawable -->
+        <item name="android:windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+        <!-- Ensure a pure black background for the system splash screen -->
+        <item name="android:windowSplashScreenBackground">@android:color/black</item>
+    </style>
+</resources>
