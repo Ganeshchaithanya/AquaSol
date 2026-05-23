@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/services/api_service.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
 
+  @override
+  State<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<AppDrawer> {
+  final ApiService _apiService = ApiService();
+  Map<String, dynamic>? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final data = await _apiService.getMe();
+      if (mounted) {
+        setState(() {
+          _user = data;
+        });
+      }
+    } catch (e) {
+      debugPrint('Drawer profile load error: $e');
+    }
+  }
+
   Future<void> _handleLogout(BuildContext context) async {
-    final apiService = ApiService();
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -35,7 +60,7 @@ class AppDrawer extends StatelessWidget {
     );
 
     if (confirm == true && context.mounted) {
-      await apiService.logout();
+      await _apiService.logout();
       if (context.mounted) {
         context.go('/login');
       }
@@ -120,6 +145,10 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final avatarUrl = _user?['avatar_url'] ?? 'https://ui-avatars.com/api/?name=${_user?['name'] ?? 'Farmer'}&background=random';
+    final name = _user?['name'] ?? 'Farmer';
+    const userRole = 'Premium Grower';
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
@@ -164,8 +193,8 @@ class AppDrawer extends StatelessWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  image: const DecorationImage(
-                    image: NetworkImage('https://i.pravatar.cc/150?u=ramesh'),
+                  image: DecorationImage(
+                    image: NetworkImage(avatarUrl),
                     fit: BoxFit.cover,
                   ),
                   border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 2),
@@ -177,7 +206,7 @@ class AppDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Ramesh Kumar',
+                      name,
                       style: AppTextStyles.label.copyWith(
                         color: Colors.white,
                         fontSize: 16,
@@ -185,7 +214,7 @@ class AppDrawer extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'Premium Grower',
+                      userRole,
                       style: AppTextStyles.caption.copyWith(
                         color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 11,

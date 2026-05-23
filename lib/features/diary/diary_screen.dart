@@ -18,6 +18,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   List<dynamic> _entries = [];
   bool _isLoading = true;
   String _selectedFilter = 'All';
+  Map<String, dynamic>? _user;
 
   @override
   void initState() {
@@ -29,9 +30,16 @@ class _DiaryScreenState extends State<DiaryScreen> {
     setState(() => _isLoading = true);
     try {
       final res = await _apiService.getDiary();
+      Map<String, dynamic>? userData;
+      try {
+        userData = await _apiService.getMe();
+      } catch (e) {
+        debugPrint('Diary profile load error: $e');
+      }
       if (mounted) {
         setState(() {
           _entries = res;
+          _user = userData;
           _isLoading = false;
         });
       }
@@ -67,10 +75,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
             margin: const EdgeInsets.only(right: 20),
             width: 36,
             height: 36,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: NetworkImage('https://i.pravatar.cc/150?u=ramesh'),
+                image: NetworkImage(_user?['avatar_url'] ?? 'https://ui-avatars.com/api/?name=${_user?['name'] ?? 'Farmer'}&background=random'),
                 fit: BoxFit.cover,
               ),
             ),

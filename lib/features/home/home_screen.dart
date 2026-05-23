@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   bool _hasError = false;
   Map<String, dynamic>? _dashboard;
+  Map<String, dynamic>? _user;
   Timer? _pollingTimer;
 
   @override
@@ -162,9 +163,16 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     try {
       final data = await _apiService.getDashboard();
+      Map<String, dynamic>? userData;
+      try {
+        userData = await _apiService.getMe();
+      } catch (e) {
+        debugPrint('Home profile load error: $e');
+      }
       if (mounted) {
         setState(() {
           _dashboard = data;
+          _user = userData;
           _hasError = false;
         });
 
@@ -472,8 +480,8 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 36,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              image: const DecorationImage(
-                image: NetworkImage('https://i.pravatar.cc/150?u=ramesh'),
+              image: DecorationImage(
+                image: NetworkImage(_user?['avatar_url'] ?? 'https://ui-avatars.com/api/?name=${_user?['name'] ?? 'Farmer'}&background=random'),
                 fit: BoxFit.cover,
               ),
               border: Border.all(color: AppColors.border),
@@ -486,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   Widget _buildGreeting(AppLocalizations l10n) {
-    final rawName = _dashboard?['name'] ?? 'Farmer';
+    final rawName = _user?['name'] ?? 'Farmer';
     final userName = rawName.contains("'") ? rawName.split("'")[0] : rawName;
     final temp = _dashboard?['weather']?['temperature'] ?? '--';
     final condition = _dashboard?['weather']?['condition'] ?? '--';
