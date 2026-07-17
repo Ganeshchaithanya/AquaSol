@@ -222,13 +222,13 @@ class _CropPlannerScreenState extends State<CropPlannerScreen> with SingleTicker
         Text('MARKET INSIGHTS', style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.5)),
         const SizedBox(height: 16),
         _buildAdvisoryItem(
-          'Market Analysis',
+          'Live Market Trends (Agentic Search)',
           marketJustification,
-          LucideIcons.trendingUp,
+          LucideIcons.globe,
           AppColors.primary,
         ),
         _buildAdvisoryItem(
-          'Risk Alert',
+          'Risk Alert & Agronomy Analysis',
           riskFlags,
           LucideIcons.alertTriangle,
           AppColors.accentOrange,

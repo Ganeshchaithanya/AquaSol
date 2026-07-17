@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../core/services/api_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'widgets/voice_recorder.dart';
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
@@ -23,6 +25,24 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     },
   ];
   bool _isTyping = false;
+  bool _hasText = false;
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  @override
+  void initState() {
+    super.initState();
+    _msgController.addListener(() {
+      setState(() => _hasText = _msgController.text.trim().isNotEmpty);
+    });
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    _msgController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   void _sendMessage() {
     final text = _msgController.text.trim();
@@ -61,6 +81,43 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       });
     });
     _scrollToBottom();
+    
+    if (result?['audio_path'] != null) {
+      final audioUrl = '${ApiService.liveUrl.replaceAll("api/v1/", "")}${result!['audio_path']}';
+      await _audioPlayer.play(UrlSource(audioUrl));
+    }
+  }
+
+  Future<void> _handleVoiceUpload(String filePath) async {
+    setState(() {
+      _messages.add({
+        'text': '🎤 Audio message sent',
+        'isUser': true,
+        'time': _getNowTime(),
+      });
+      _isTyping = true;
+    });
+    _scrollToBottom();
+    
+    final apiService = Provider.of<ApiService>(context, listen: false);
+    final result = await apiService.chatVoice(filePath);
+    
+    if (!mounted) return;
+    
+    setState(() {
+      _isTyping = false;
+      _messages.add({
+        'text': result?['reply'] ?? 'I am having trouble connecting.',
+        'isUser': false,
+        'time': _getNowTime(),
+      });
+    });
+    _scrollToBottom();
+    
+    if (result?['audio_path'] != null) {
+      final audioUrl = '${ApiService.liveUrl.replaceAll("api/v1/", "")}${result!['audio_path']}';
+      await _audioPlayer.play(UrlSource(audioUrl));
+    }
   }
 
   String _getNowTime() {
@@ -270,21 +327,23 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          GestureDetector(
-            onTap: _sendMessage,
-            child: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                gradient: AppColors.primaryGradient,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4)),
-                ],
-              ),
-              child: const Icon(LucideIcons.send, color: Colors.white, size: 20),
-            ),
-          ),
+          _hasText
+              ? GestureDetector(
+                  onTap: _sendMessage,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      gradient: AppColors.primaryGradient,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4)),
+                      ],
+                    ),
+                    child: const Icon(LucideIcons.send, color: Colors.white, size: 20),
+                  ),
+                )
+              : VoiceRecorder(onRecordingComplete: _handleVoiceUpload),
         ],
       ),
     );

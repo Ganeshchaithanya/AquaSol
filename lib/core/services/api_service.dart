@@ -489,6 +489,20 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>?> chatVoice(String filePath, {String? zoneId}) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(filePath, filename: 'voice.m4a'),
+        if (zoneId != null) 'zone_id': zoneId,
+      });
+      final response = await _dio.post('chat/voice', data: formData);
+      return response.data;
+    } catch (e) {
+      debugPrint('ChatVoice error: $e');
+      return {'reply': 'I am having trouble connecting to my brain right now. Please try again later.'};
+    }
+  }
+
   Future<Map<String, dynamic>?> getCropPlan({
     required String query,
     required String zoneId,
