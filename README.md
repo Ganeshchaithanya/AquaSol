@@ -40,7 +40,7 @@ flutter pub get
 ### 3. Configure API Connection
 Create a `.env` file in the root folder of the mobile app to set your endpoint:
 ```env
-API_BASE_URL="https://irrigation-api-v2.onrender.com/api/v1"
+API_BASE_URL="https://aquasol-software.onrender.com/api/v1"
 ```
 
 ### 4. Run the Application

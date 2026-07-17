@@ -8,9 +8,9 @@ import '../theme/app_text_styles.dart';
 
 class UpdateService {
   static const String _backendVersionUrl =
-      'https://irrigation-api-v2.onrender.com/api/v1/app/version';
-  static const String _downloadUrl =
-      'https://irrigation-api-v2.onrender.com/api/v1/app/download';
+      'https://aquasol-software.onrender.com/api/v1/app/version';
+  static const String appDownloadUrl =
+      'https://aquasol-software.onrender.com/api/v1/app/download';
 
   static bool _hasChecked = false;
   static bool _isDialogShowing = false;
@@ -227,14 +227,14 @@ class UpdateService {
                             if (context.mounted) {
                               Navigator.pop(context);
                             }
-                            final Uri url = Uri.parse(_downloadUrl);
+                            final Uri url = Uri.parse(appDownloadUrl);
                             if (await canLaunchUrl(url)) {
                               await launchUrl(
                                 url,
                                 mode: LaunchMode.externalApplication,
                               );
                             } else {
-                              debugPrint('Could not launch $_downloadUrl');
+                              debugPrint('Could not launch $appDownloadUrl');
                             }
                           },
                           style: ElevatedButton.styleFrom(

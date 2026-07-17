@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // Live Render backend URL
-  static const String liveUrl = 'https://irrigation-api-v2.onrender.com/api/v1/';
+  static const String liveUrl = 'https://aquasol-software.onrender.com/api/v1/';
 
   static String get baseUrl {
     return liveUrl;
