@@ -241,7 +241,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   ],
                 ),
                 child: Text(
-                  msg['text'],
+                  _cleanMessageText(msg['text'] ?? ''),
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: isUser ? Colors.white : AppColors.textPrimary,
                     height: 1.4,
@@ -258,6 +258,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         ],
       ),
     );
+  }
+
+  String _cleanMessageText(String text) {
+    var cleaned = text.replaceAll(RegExp(r'\[ACTION:\s*\{.*?\}\]'), '');
+    cleaned = cleaned.replaceAll(RegExp(r'\*\([^)]*Command executed:[^)]*\)\*'), '');
+    return cleaned.trim();
   }
 
   Widget _buildTypingIndicator() {
