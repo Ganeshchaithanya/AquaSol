@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/services/api_service.dart';
+import '../../core/services/update_service.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
@@ -124,6 +125,13 @@ class _AppDrawerState extends State<AppDrawer> {
                   label: 'My Profile',
                   route: '/profile',
                 ),
+                _buildDrawerItem(
+                  context,
+                  icon: LucideIcons.downloadCloud,
+                  label: 'Check for Updates',
+                  onTap: () => UpdateService.checkForUpdates(context, force: true),
+                  iconColor: AppColors.primary,
+                ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   child: Divider(color: AppColors.border, height: 1),
@@ -138,7 +146,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
           ),
-          _buildFooter(),
+          _buildFooter(context),
         ],
       ),
     );
@@ -276,25 +284,35 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  Widget _buildFooter() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        children: [
-          Text(
-            'AquaSol v2.0.1+2',
-            style: AppTextStyles.caption.copyWith(fontSize: 10),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Decisions Powered by Solu AI',
-            style: AppTextStyles.caption.copyWith(
-              fontSize: 9,
-              color: AppColors.accentPurple,
-              fontWeight: FontWeight.bold,
+  Widget _buildFooter(BuildContext context) {
+    return GestureDetector(
+      onTap: () => UpdateService.checkForUpdates(context, force: true),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(LucideIcons.refreshCw, size: 10, color: AppColors.textMuted),
+                const SizedBox(width: 4),
+                Text(
+                  'AquaSol v2.0.1+2 • Tap to update',
+                  style: AppTextStyles.caption.copyWith(fontSize: 10),
+                ),
+              ],
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              'Decisions Powered by Solu AI',
+              style: AppTextStyles.caption.copyWith(
+                fontSize: 9,
+                color: AppColors.accentPurple,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

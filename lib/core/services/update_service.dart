@@ -16,12 +16,35 @@ class UpdateService {
   static bool _isDialogShowing = false;
 
   /// Checks for updates silently and pops up a modal if a new release is found.
+  /// If [force] is true, provides active feedback via SnackBar.
   static Future<void> checkForUpdates(BuildContext context, {bool force = false}) async {
     if (_hasChecked && !force) {
       debugPrint('[UpdateService] Update check already performed in this session. Skipping.');
       return;
     }
     _hasChecked = true;
+
+    if (force && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+              ),
+              SizedBox(width: 12),
+              Text('Checking for AquaSol updates...'),
+            ],
+          ),
+          backgroundColor: AppColors.primary,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
+    }
 
     try {
       // 1. Get current installed app version including build number (e.g. "3.6.0+0")
@@ -30,38 +53,45 @@ class UpdateService {
 
       // 2. Fetch the latest release info from Render API
       final dio = Dio();
-      // Set reasonable timeouts so startup is not blocked if offline
       dio.options.connectTimeout = const Duration(seconds: 5);
       dio.options.receiveTimeout = const Duration(seconds: 5);
       
       final response = await dio.get(_backendVersionUrl);
       if (response.statusCode == 200 && response.data != null) {
         final Map<String, dynamic> data = response.data;
-        final String? onlineVersion = data['version']; // e.g. "3.6.0" or "3.6.0+1"
+        final String? onlineVersion = data['version']; // e.g. "3.7.0+1"
 
         if (onlineVersion != null) {
-          final prefs = await SharedPreferences.getInstance();
-          final lastSeenVersion = prefs.getString('last_seen_update_version');
-          
-          if (lastSeenVersion == onlineVersion) {
-            // Already updated or processed this version, don't show the pop up again
-            debugPrint('[UpdateService] Update to $onlineVersion was already handled/dismissed.');
-            return;
-          }
-
           final isNewer = _isNewerVersion(currentVersion, onlineVersion);
           if (isNewer && context.mounted) {
-            if (_isDialogShowing) {
-              debugPrint('[UpdateService] Update dialog is already visible. Skipping.');
-              return;
-            }
+            if (_isDialogShowing) return;
             _showUpdateDialog(context, currentVersion, onlineVersion);
+          } else if (force && context.mounted) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('You are on the latest version of AquaSol (v$currentVersion)!'),
+                backgroundColor: AppColors.accentGreen,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            );
           }
         }
       }
     } catch (e) {
-      // Fail silently to prevent interrupting the app startup flow if backend is offline
-      debugPrint('Failed to check for updates (backend offline or timeout): $e');
+      debugPrint('Failed to check for updates: $e');
+      if (force && context.mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Unable to connect to update server. Check your internet connection.'),
+            backgroundColor: AppColors.accentRed,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        );
+      }
     }
   }
 
