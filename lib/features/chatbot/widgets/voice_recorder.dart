@@ -7,7 +7,7 @@ import '../../../core/theme/app_colors.dart';
 class VoiceRecorder extends StatefulWidget {
   final Function(String filePath) onRecordingComplete;
 
-  const VoiceRecorder({Key? key, required this.onRecordingComplete}) : super(key: key);
+  const VoiceRecorder({super.key, required this.onRecordingComplete});
 
   @override
   State<VoiceRecorder> createState() => _VoiceRecorderState();
@@ -72,7 +72,7 @@ class _VoiceRecorderState extends State<VoiceRecorder> {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: _isRecording ? Colors.red.withOpacity(0.3) : AppColors.primary.withOpacity(0.3),
+              color: _isRecording ? Colors.red.withValues(alpha: 0.3) : AppColors.primary.withValues(alpha: 0.3),
               blurRadius: 10,
               offset: const Offset(0, 4)
             ),

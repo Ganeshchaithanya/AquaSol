@@ -715,6 +715,7 @@ class _InteractiveScaleButtonState extends State<InteractiveScaleButton> with Si
           scale: _scaleAnimation,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
+            // ignore: deprecated_member_use
             transform: Matrix4.identity()..scale(_isHovered ? 1.03 : 1.0),
             transformAlignment: Alignment.center,
             child: widget.child,

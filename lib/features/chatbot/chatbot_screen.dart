@@ -337,7 +337,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                       gradient: AppColors.primaryGradient,
                       shape: BoxShape.circle,
                       boxShadow: [
-                        BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4)),
+                        BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4)),
                       ],
                     ),
                     child: const Icon(LucideIcons.send, color: Colors.white, size: 20),
