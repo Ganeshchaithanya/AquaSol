@@ -146,6 +146,35 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
   }
 
   Widget _buildStressGauge() {
+    // Compute health score from moisture: 40-80% = optimal (100), outside = lower
+    final double? moisture = _zone?['current_moisture'] != null
+        ? (_zone!['current_moisture'] as num).toDouble()
+        : null;
+    int healthScore;
+    String healthLabel;
+    Color healthColor;
+    if (moisture == null) {
+      healthScore = 0;
+      healthLabel = 'NO DATA';
+      healthColor = AppColors.textMuted;
+    } else if (moisture >= 40 && moisture <= 80) {
+      healthScore = 95;
+      healthLabel = 'OPTIMAL';
+      healthColor = AppColors.primary;
+    } else if (moisture >= 25 && moisture < 40) {
+      healthScore = 65;
+      healthLabel = 'LOW MOISTURE';
+      healthColor = AppColors.accentOrange;
+    } else if (moisture > 80 && moisture <= 90) {
+      healthScore = 75;
+      healthLabel = 'HIGH MOISTURE';
+      healthColor = AppColors.accentOrange;
+    } else {
+      healthScore = 35;
+      healthLabel = 'CRITICAL';
+      healthColor = AppColors.accentRed;
+    }
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -175,20 +204,18 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
                 width: 160,
                 height: 160,
                 child: CircularProgressIndicator(
-                  value: (_zone?['health_score'] ?? 85) / 100,
+                  value: healthScore / 100,
                   strokeWidth: 14,
                   backgroundColor: AppColors.primaryLight,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    (_zone?['health_score'] ?? 85) < 50 ? AppColors.accentRed : AppColors.primary
-                  ),
+                  valueColor: AlwaysStoppedAnimation<Color>(healthColor),
                   strokeCap: StrokeCap.round,
                 ),
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('${_zone?['health_score'] ?? '--'}', style: AppTextStyles.dataDisplay.copyWith(fontSize: 48, color: AppColors.primary)),
-                  Text((_zone?['health_score'] ?? 85) < 50 ? 'CRITICAL' : 'OPTIMAL', style: AppTextStyles.caption.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                  Text('$healthScore', style: AppTextStyles.dataDisplay.copyWith(fontSize: 48, color: healthColor)),
+                  Text(healthLabel, style: AppTextStyles.caption.copyWith(color: healthColor, fontWeight: FontWeight.bold)),
                 ],
               ),
             ],
@@ -197,10 +224,13 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
+              color: healthColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text('OPTIMAL GROWTH CONDITION', style: AppTextStyles.label.copyWith(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.bold)),
+            child: Text(
+              moisture != null ? 'SOIL MOISTURE: ${moisture.toStringAsFixed(1)}%' : 'WAITING FOR SENSOR DATA',
+              style: AppTextStyles.label.copyWith(color: healthColor, fontSize: 11, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
@@ -209,51 +239,54 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
 
   Widget _buildSensorGrid() {
     final List<dynamic> nodes = _zone?['nodes'] ?? [];
-    
+
     double? avgMoisture;
     double? avgTemp;
     double? avgHum;
-    
+
     if (nodes.isNotEmpty) {
-      final List<num> validMoistures = nodes
+      // Only include non-null AND non-zero values (0.0 means no reading yet)
+      final List<double> validMoistures = nodes
           .map((n) => n['current_moisture'])
-          .where((v) => v != null)
-          .cast<num>()
+          .where((v) => v != null && (v as num).toDouble() > 0)
+          .map<double>((v) => (v as num).toDouble())
           .toList();
       if (validMoistures.isNotEmpty) {
-        avgMoisture = validMoistures.map((v) => v.toDouble()).reduce((a, b) => a + b) / validMoistures.length;
+        avgMoisture = validMoistures.reduce((a, b) => a + b) / validMoistures.length;
       }
-      
-      final List<num> validTemps = nodes
+
+      final List<double> validTemps = nodes
           .map((n) => n['temperature'])
-          .where((v) => v != null)
-          .cast<num>()
+          .where((v) => v != null && (v as num).toDouble() > 0)
+          .map<double>((v) => (v as num).toDouble())
           .toList();
       if (validTemps.isNotEmpty) {
-        avgTemp = validTemps.map((v) => v.toDouble()).reduce((a, b) => a + b) / validTemps.length;
+        avgTemp = validTemps.reduce((a, b) => a + b) / validTemps.length;
       }
-      
-      final List<num> validHums = nodes
+
+      final List<double> validHums = nodes
           .map((n) => n['humidity'])
-          .where((v) => v != null)
-          .cast<num>()
+          .where((v) => v != null && (v as num).toDouble() > 0)
+          .map<double>((v) => (v as num).toDouble())
           .toList();
       if (validHums.isNotEmpty) {
-        avgHum = validHums.map((v) => v.toDouble()).reduce((a, b) => a + b) / validHums.length;
+        avgHum = validHums.reduce((a, b) => a + b) / validHums.length;
       }
     }
-    
-    // Sleek premium default weather fallback if still null
-    final double? moistureVal = _zone?['current_moisture'] != null 
-        ? (_zone!['current_moisture'] as num).toDouble() 
+
+    // Prefer zone-level aggregated values, fall back to node averages
+    final double? moistureVal = _zone?['current_moisture'] != null
+        ? (_zone!['current_moisture'] as num).toDouble()
         : avgMoisture;
-        
-    final double? tempVal = _zone?['temperature_avg_6h'] != null 
-        ? (_zone!['temperature_avg_6h'] as num).toDouble() 
+
+    final double? tempVal = (_zone?['temperature_avg_6h'] != null &&
+            (_zone!['temperature_avg_6h'] as num).toDouble() > 0)
+        ? (_zone!['temperature_avg_6h'] as num).toDouble()
         : avgTemp;
-        
-    final double? humVal = _zone?['humidity_avg_6h'] != null 
-        ? (_zone!['humidity_avg_6h'] as num).toDouble() 
+
+    final double? humVal = (_zone?['humidity_avg_6h'] != null &&
+            (_zone!['humidity_avg_6h'] as num).toDouble() > 0)
+        ? (_zone!['humidity_avg_6h'] as num).toDouble()
         : avgHum;
 
     return GridView.count(
@@ -265,9 +298,9 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
       childAspectRatio: 1.4,
       children: [
         _buildSensorTile(
-          'MOISTURE', 
-          moistureVal != null ? '${moistureVal.toStringAsFixed(1)}%' : '100.0%', 
-          LucideIcons.droplet, 
+          'MOISTURE',
+          moistureVal != null ? '${moistureVal.toStringAsFixed(1)}%' : '--',
+          LucideIcons.droplet,
           const Color(0xFF0EA5E9),
           gradient: const LinearGradient(
             colors: [Color(0xFF0EA5E9), Color(0xFF2563EB)],
@@ -276,9 +309,9 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
           ),
         ),
         _buildSensorTile(
-          'TEMP', 
-          tempVal != null ? '${tempVal.toStringAsFixed(1)}°C' : '31.5°C', 
-          LucideIcons.thermometer, 
+          'TEMP',
+          tempVal != null ? '${tempVal.toStringAsFixed(1)}°C' : '--',
+          LucideIcons.thermometer,
           const Color(0xFFF97316),
           gradient: const LinearGradient(
             colors: [Color(0xFFF97316), Color(0xFFEA580C)],
@@ -287,9 +320,9 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
           ),
         ),
         _buildSensorTile(
-          'HUMIDITY', 
-          humVal != null ? '${humVal.toStringAsFixed(1)}%' : '63.7%', 
-          LucideIcons.cloudRain, 
+          'HUMIDITY',
+          humVal != null ? '${humVal.toStringAsFixed(1)}%' : '--',
+          LucideIcons.cloudRain,
           const Color(0xFF0D9488),
           gradient: const LinearGradient(
             colors: [Color(0xFF0D9488), Color(0xFF0F766E)],
@@ -298,9 +331,9 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
           ),
         ),
         _buildSensorTile(
-          'ETc', 
-          _zone?['etc'] != null ? '${_zone!['etc']} mm/h' : '0.84 mm/h', 
-          LucideIcons.wind, 
+          'NODES',
+          '${nodes.length} Active',
+          LucideIcons.cpu,
           const Color(0xFF8B5CF6),
           gradient: const LinearGradient(
             colors: [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
@@ -460,8 +493,21 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
   Widget _buildNodeItem(Map<String, dynamic> node) {
     final bool isOnline = node['status'] == 'online' || node['status'] == 'active';
     final double battery = (node['battery_pct'] ?? 0.0).toDouble();
-    
-    return Container(
+    final String mac = node['mac_address'] ?? 'unknown';
+
+    final double? tempVal = (node['temperature'] ?? _zone?['temperature_avg_6h']) != null
+        ? ((node['temperature'] ?? _zone?['temperature_avg_6h']) as num).toDouble()
+        : null;
+    final double? humVal = (node['humidity'] ?? _zone?['humidity_avg_6h']) != null
+        ? ((node['humidity'] ?? _zone?['humidity_avg_6h']) as num).toDouble()
+        : null;
+
+    return GestureDetector(
+      onTap: () => context.push(
+        '/farm/node/$mac',
+        extra: {'node': node, 'zoneId': widget.zoneId},
+      ),
+      child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white, 
@@ -547,20 +593,20 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
                     ),
                     const SizedBox(width: 10),
                     
-                    // Temperature
+                    // Temperature (shares zone microclimate if individual node reading is missing)
                     Icon(LucideIcons.thermometer, size: 12, color: isOnline ? AppColors.accentOrange : AppColors.textMuted),
                     const SizedBox(width: 4),
                     Text(
-                      node['temperature'] != null ? '${node['temperature']}°C' : '--°C', 
+                      tempVal != null ? '${tempVal.toStringAsFixed(1)}°C' : '--°C', 
                       style: AppTextStyles.caption.copyWith(color: isOnline ? AppColors.accentOrange : AppColors.textMuted)
                     ),
                     const SizedBox(width: 10),
                     
-                    // Humidity
+                    // Humidity (shares zone microclimate if individual node reading is missing)
                     Icon(LucideIcons.cloudRain, size: 12, color: isOnline ? AppColors.primary : AppColors.textMuted),
                     const SizedBox(width: 4),
                     Text(
-                      node['humidity'] != null ? '${node['humidity']}%' : '--%', 
+                      humVal != null ? '${humVal.toStringAsFixed(0)}%' : '--%', 
                       style: AppTextStyles.caption.copyWith(color: isOnline ? AppColors.primary : AppColors.textMuted)
                     ),
                   ],
@@ -658,6 +704,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 }
