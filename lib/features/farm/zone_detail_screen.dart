@@ -495,18 +495,30 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
     final double battery = (node['battery_pct'] ?? 0.0).toDouble();
     final String mac = node['mac_address'] ?? 'unknown';
 
-    final double? tempVal = (node['temperature'] ?? _zone?['temperature_avg_6h']) != null
-        ? ((node['temperature'] ?? _zone?['temperature_avg_6h']) as num).toDouble()
-        : null;
-    final double? humVal = (node['humidity'] ?? _zone?['humidity_avg_6h']) != null
-        ? ((node['humidity'] ?? _zone?['humidity_avg_6h']) as num).toDouble()
-        : null;
+    final double? rawTemp = node['temperature'] != null ? (node['temperature'] as num).toDouble() : null;
+    final double? zoneTemp = _zone?['temperature_avg_6h'] != null ? (_zone!['temperature_avg_6h'] as num).toDouble() : null;
+    final double? tempVal = (rawTemp != null && rawTemp > 0) ? rawTemp : ((zoneTemp != null && zoneTemp > 0) ? zoneTemp : null);
+
+    final double? rawHum = node['humidity'] != null ? (node['humidity'] as num).toDouble() : null;
+    final double? zoneHum = _zone?['humidity_avg_6h'] != null ? (_zone!['humidity_avg_6h'] as num).toDouble() : null;
+    final double? humVal = (rawHum != null && rawHum > 0) ? rawHum : ((zoneHum != null && zoneHum > 0) ? zoneHum : null);
 
     return GestureDetector(
-      onTap: () => context.push(
-        '/farm/node/$mac',
-        extra: {'node': node, 'zoneId': widget.zoneId},
-      ),
+      onTap: () {
+        // Enrich node map with zone microclimate so NodeDetailScreen can display
+        // shared temperature & humidity when a node's own reading is missing/zero
+        final enrichedNode = Map<String, dynamic>.from(node);
+        if (_zone?['temperature_avg_6h'] != null) {
+          enrichedNode['temperature_avg_6h'] = _zone!['temperature_avg_6h'];
+        }
+        if (_zone?['humidity_avg_6h'] != null) {
+          enrichedNode['humidity_avg_6h'] = _zone!['humidity_avg_6h'];
+        }
+        context.push(
+          '/farm/node/$mac',
+          extra: {'node': enrichedNode, 'zoneId': widget.zoneId},
+        );
+      },
       child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

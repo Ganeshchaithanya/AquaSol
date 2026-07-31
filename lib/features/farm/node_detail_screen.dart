@@ -120,6 +120,17 @@ class _NodeDetailScreenState extends State<NodeDetailScreen> {
   }
 
   Widget _buildTelemetryGrid() {
+    // Use node's own reading; fall back to zone microclimate if reading is missing or zero
+    final double? rawTemp = _node['temperature'] != null ? (_node['temperature'] as num).toDouble() : null;
+    final double? zoneTemp = _node['temperature_avg_6h'] != null ? (_node['temperature_avg_6h'] as num).toDouble() : null;
+    final double? displayTemp = (rawTemp != null && rawTemp > 0) ? rawTemp : ((zoneTemp != null && zoneTemp > 0) ? zoneTemp : null);
+
+    final double? rawHum = _node['humidity'] != null ? (_node['humidity'] as num).toDouble() : null;
+    final double? zoneHum = _node['humidity_avg_6h'] != null ? (_node['humidity_avg_6h'] as num).toDouble() : null;
+    final double? displayHum = (rawHum != null && rawHum > 0) ? rawHum : ((zoneHum != null && zoneHum > 0) ? zoneHum : null);
+
+    final double? rawMoisture = _node['current_moisture'] != null ? (_node['current_moisture'] as num).toDouble() : null;
+
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -128,9 +139,9 @@ class _NodeDetailScreenState extends State<NodeDetailScreen> {
       crossAxisSpacing: 16,
       childAspectRatio: 1.1,
       children: [
-        _buildDataCard('Soil Moisture', '${_node['current_moisture'] ?? "--"}%', LucideIcons.droplet, AppColors.accentBlue),
-        _buildDataCard('Temperature', '${_node['temperature'] ?? "--"}°C', LucideIcons.thermometer, AppColors.accentOrange),
-        _buildDataCard('Humidity', '${_node['humidity'] ?? "--"}%', LucideIcons.wind, AppColors.accentBlue),
+        _buildDataCard('Soil Moisture', rawMoisture != null ? '${rawMoisture.toStringAsFixed(1)}%' : '--', LucideIcons.droplet, AppColors.accentBlue),
+        _buildDataCard('Temperature', displayTemp != null ? '${displayTemp.toStringAsFixed(1)}°C' : '--°C', LucideIcons.thermometer, AppColors.accentOrange),
+        _buildDataCard('Humidity', displayHum != null ? '${displayHum.toStringAsFixed(1)}%' : '--%', LucideIcons.wind, AppColors.accentBlue),
         _buildDataCard('Battery', '${_node['battery_pct'] ?? "--"}%', LucideIcons.battery, AppColors.accentGreen),
       ],
     );
